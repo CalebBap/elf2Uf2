@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 
+from ELF.Elf import Elf
 import argparse
 import errno
 import os
@@ -15,6 +16,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(prog="elf2Uf2", description="Generate a UF2 image from an ELF file")
     parser.add_argument("input", nargs=1, type=str, help="The ELF file from which to generate the UF2 image")
     parser.add_argument("-o", "--output", nargs='?', type=str, help="The file path to write the generated UF2 image to")
+    parser.add_argument("-v", "--verbose", action='store_true', help="Print verbose output")
     args = parser.parse_args()
 
     INPUT_PATH = os.path.abspath(args.input[0])
@@ -26,3 +28,10 @@ if __name__ == "__main__":
         OUTPUT_PATH = os.path.abspath(args.output)
     else:
         OUTPUT_PATH = default_output_path(INPUT_PATH)
+
+    VERBOSE = args.verbose
+
+    elf = Elf(INPUT_PATH, VERBOSE)
+    if not elf.parse():
+        print(f"Failed to parse ELF file")
+        sys.exit(errno.EINVAL)
