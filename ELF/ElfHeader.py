@@ -1,4 +1,4 @@
-from ELF.Constants import *
+from ELF.ElfHeaderConstants import *
 import os
 from typing import BinaryIO
 
@@ -286,7 +286,8 @@ class ElfHeader:
                f"\n\tProgram header entry count: {self.__bytes_to_int(self.e_phnum)}"
                f"\n\tSeciton header entry size: {self.__bytes_to_int(self.e_shentsize)} bytes"
                f"\n\tSection header entry count: {self.__bytes_to_int(self.e_shnum)}"
-               f"\n\tSection name index: {self.__bytes_to_int(self.e_shstrndx)}"))
+               f"\n\tSection name index: {self.__bytes_to_int(self.e_shstrndx)}"
+               f"\n\n"))
 
     def parse(self) -> bool:
         with open(self.INPUT_PATH, 'rb') as elf_file:
@@ -314,3 +315,12 @@ class ElfHeader:
             ]
 
             return all(func(elf_file) for func in parse_funcs)
+
+    def ph_table_offset(self) -> int:
+        return self.__bytes_to_int(self.e_phoff)
+
+    def ph_entry_size(self) -> int:
+        return self.__bytes_to_int(self.e_phentsize)
+
+    def ph_table_entry_count(self) -> int:
+        return self.__bytes_to_int(self.e_phnum)

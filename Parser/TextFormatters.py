@@ -1,0 +1,3 @@
+TEXT_BOLD = '\033[1m'
+TEXT_UNDERLINE = '\033[4m'
+TEXT_END = '\033[0m'
