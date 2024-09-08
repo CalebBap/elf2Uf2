@@ -33,5 +33,5 @@ if __name__ == "__main__":
 
     elf = Elf(INPUT_PATH, VERBOSE)
     if not elf.parse():
-        print(f"Failed to parse ELF file")
+        print(f"\nFailed to parse ELF file")
         sys.exit(errno.EINVAL)

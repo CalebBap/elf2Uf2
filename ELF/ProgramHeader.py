@@ -1,3 +1,5 @@
+from Parser.Parser import *
+
 class ElfProgramHeader:
     def __init__(self, input_path: str, size: int, offset: int):
         self.INPUT_PATH = input_path
@@ -14,8 +16,7 @@ class ElfProgramHeader:
         self.p_align = None
 
     def dump_values(self) -> str:
-        print((f"Program Header values:"
-               f"\n\n"))
+        dump_values("Program Header values", [])
 
     def parse(self) -> bool:
         with open(self.INPUT_PATH, 'rb') as elf_file:

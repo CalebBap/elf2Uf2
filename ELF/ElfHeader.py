@@ -1,4 +1,6 @@
 from ELF.ElfHeaderConstants import *
+from Parser.Parser import *
+
 import os
 from typing import BinaryIO
 
@@ -26,102 +28,92 @@ class ElfHeader:
         self.e_shnum = None
         self.e_shstrndx = None
 
-    def __get_field(self, file: BinaryIO, length: int) -> bytes:
-        if self.FILE_SIZE < (file.tell() + length):
-            print(f"Error: invalid ELF file size - {self.FILE_SIZE} bytes")
-            return None
-
-        return file.read(length)
-
     def __parse_magic(self, file: BinaryIO) -> bool:
-        self.ei_mag = self.__get_field(file, EI_MAG_LEN)
+        self.ei_mag = get_field(file, self.FILE_SIZE, EI_MAG_LEN)
         return self.ei_mag is not None
 
     def __parse_format(self, file: BinaryIO) -> bool:
-        self.ei_class = self.__get_field(file, EI_CLASS_LEN)
+        self.ei_class = get_field(file, self.FILE_SIZE, EI_CLASS_LEN)
         return self.ei_class is not None
 
     def __parse_endianness(self, file: BinaryIO) -> bool:
-        self.ei_data = self.__get_field(file, EI_DATA_LEN)
+        self.ei_data = get_field(file, self.FILE_SIZE, EI_DATA_LEN)
         return self.ei_data is not None
 
     def __parse_version(self, file: BinaryIO) -> bool:
-        self.ei_version = self.__get_field(file, EI_VERSION_LEN)
+        self.ei_version = get_field(file, self.FILE_SIZE, EI_VERSION_LEN)
         return self.ei_version is not None
 
     def __parse_abi(self, file: BinaryIO) -> bool:
-        self.ei_osabi = self.__get_field(file, EI_OSABI_LEN)
+        self.ei_osabi = get_field(file, self.FILE_SIZE, EI_OSABI_LEN)
         return self.ei_osabi is not None
 
     def __parse_abi_version(self, file: BinaryIO) -> bool:
-        self.ei_abiversion = self.__get_field(file, EI_ABIVERSION_LEN)
+        self.ei_abiversion = get_field(file, self.FILE_SIZE, EI_ABIVERSION_LEN)
         return self.ei_abiversion is not None
 
     def __parse_padding(self, file: BinaryIO) -> bool:
-        padding = self.__get_field(file, EI_PAD_LEN)
+        padding = get_field(file, self.FILE_SIZE, EI_PAD_LEN)
         return padding is not None
 
     def __parse_type(self, file: BinaryIO) -> bool:
-        self.e_type = self.__get_field(file, E_TYPE_LEN)
+        self.e_type = get_field(file, self.FILE_SIZE, E_TYPE_LEN)
         return self.e_type is not None
 
     def __parse_machine(self, file: BinaryIO) -> bool:
-        self.e_machine = self.__get_field(file, E_MACHINE_LEN)
+        self.e_machine = get_field(file, self.FILE_SIZE, E_MACHINE_LEN)
         return self.e_machine is not None
 
     def __parse_version_2(self, file: BinaryIO) -> bool:
-        self.e_version = self.__get_field(file, E_VERSION_LEN)
+        self.e_version = get_field(file, self.FILE_SIZE, E_VERSION_LEN)
         return self.e_version is not None
 
     def __parse_entry_addr(self, file: BinaryIO) -> bool:
         e_entry_len = E_ENTRY_LEN_32_BIT if self.ei_class == EI_CLASS_32_BIT else E_ENTRY_LEN_64_BIT
-        self.e_entry = self.__get_field(file, e_entry_len)
+        self.e_entry = get_field(file, self.FILE_SIZE, e_entry_len)
         return self.e_entry is not None
 
     def __parse_ph_offset(self, file: BinaryIO) -> bool:
         e_phoff_len = E_PHOFF_LEN_32_BIT if self.ei_class == EI_CLASS_32_BIT else E_PHOFF_LEN_64_BIT
-        self.e_phoff = self.__get_field(file, e_phoff_len)
+        self.e_phoff = get_field(file, self.FILE_SIZE, e_phoff_len)
         return self.e_phoff is not None
 
     def __parse_sh_offset(self, file: BinaryIO) -> bool:
         e_shoff_len = E_SHOFF_LEN_32_BIT if self.ei_class == EI_CLASS_32_BIT else E_SHOFF_LEN_64_BIT
-        self.e_shoff = self.__get_field(file, e_shoff_len)
+        self.e_shoff = get_field(file, self.FILE_SIZE, e_shoff_len)
         return self.e_shoff is not None
 
     def __parse_flags(self, file: BinaryIO) -> bool:
-        self.e_flags = self.__get_field(file, E_FLAGS_LEN)
+        self.e_flags = get_field(file, self.FILE_SIZE, E_FLAGS_LEN)
         return self.e_flags is not None
 
     def __parse_eh_size(self, file: BinaryIO) -> bool:
-        self.e_ehsize = self.__get_field(file, E_EHSIZE_LEN)
+        self.e_ehsize = get_field(file, self.FILE_SIZE, E_EHSIZE_LEN)
         return self.e_ehsize is not None
 
     def __parse_phent_size(self, file: BinaryIO) -> bool:
-        self.e_phentsize = self.__get_field(file, E_PHENTSIZE_LEN)
+        self.e_phentsize = get_field(file, self.FILE_SIZE, E_PHENTSIZE_LEN)
         return self.e_phentsize is not None
 
     def __parse_ph_num(self, file: BinaryIO) -> bool:
-        self.e_phnum = self.__get_field(file, E_PHNUM_LEN)
+        self.e_phnum = get_field(file, self.FILE_SIZE, E_PHNUM_LEN)
         return self.e_phnum is not None
 
     def __parse_shent_size(self, file: BinaryIO) -> bool:
-        self.e_shentsize = self.__get_field(file, E_SHENTSIZE_LEN)
+        self.e_shentsize = get_field(file, self.FILE_SIZE, E_SHENTSIZE_LEN)
         return self.e_shentsize is not None
 
     def __parse_sh_num(self, file: BinaryIO) -> bool:
-        self.e_shnum = self.__get_field(file, E_SHNUM_LEN)
+        self.e_shnum = get_field(file, self.FILE_SIZE, E_SHNUM_LEN)
         return self.e_shnum is not None
 
     def __parse_shstrndx(self, file: BinaryIO) -> bool:
-        self.e_shstrndx = self.__get_field(file, E_SHSTRNDX_LEN)
+        self.e_shstrndx = get_field(file, self.FILE_SIZE, E_SHSTRNDX_LEN)
         return self.e_shstrndx is not None
 
     def __bytes_to_int(self, value: bytes) -> int:
         endianess = 'little' if self.ei_data == EI_DATA_LITTLE else 'big'
         return int.from_bytes(value, endianess)
-
-    def __stringify(self, value: bytes, stringified_values: dict) -> str:
-        return stringified_values[value] if value in stringified_values else value.hex()
 
     def __arm_eabi_unknown_flags(self, flags: int) -> str:
         str = ", GNU EABI"
@@ -268,26 +260,28 @@ class ElfHeader:
         return str
 
     def dump_values(self):
-        print((f"ELF Header values:"
-               f"\n\tMagic: {self.ei_mag.decode()}"
-               f"\n\tClass: {self.__stringify(self.ei_class, CLASS_VALUES)}"
-               f"\n\tEndianess: {self.__stringify(self.ei_data, DATA_VALUES)}"
-               f"\n\tVersion: {self.__bytes_to_int(self.ei_version)}"
-               f"\n\tOS ABI: {self.__stringify(self.ei_osabi, ABI_VALUES)}"
-               f"\n\tABI version: {self.__bytes_to_int(self.ei_abiversion)}"
-               f"\n\tObject file type: {self.__stringify(self.e_type, OBJECT_FILE_TYPES)}"
-               f"\n\tISA: {self.__stringify(self.e_machine, MACHINE_TYPES)}"
-               f"\n\tEntry point: {hex(self.__bytes_to_int(self.e_entry))}"
-               f"\n\tProgram header offset: {hex(self.__bytes_to_int(self.e_phoff))}"
-               f"\n\tSection header offset: {hex(self.__bytes_to_int(self.e_shoff))}"
-               f"\n\tFlags: {self.__arm_flags_str()}"
-               f"\n\tELF header size: {self.__bytes_to_int(self.e_ehsize)} bytes"
-               f"\n\tProgram header entry size: {self.__bytes_to_int(self.e_phentsize)} bytes"
-               f"\n\tProgram header entry count: {self.__bytes_to_int(self.e_phnum)}"
-               f"\n\tSeciton header entry size: {self.__bytes_to_int(self.e_shentsize)} bytes"
-               f"\n\tSection header entry count: {self.__bytes_to_int(self.e_shnum)}"
-               f"\n\tSection name index: {self.__bytes_to_int(self.e_shstrndx)}"
-               f"\n\n"))
+        values = [
+            ValueString("Magic", self.ei_mag, lambda bytes: bytes.decode()),
+            ValueString("Class", self.ei_class, lambda bytes: stringify(bytes, CLASS_VALUES)),
+            ValueString("Endianess", self.ei_data, lambda bytes: stringify(bytes, DATA_VALUES)),
+            ValueString("Version", self.ei_version, self.__bytes_to_int),
+            ValueString("OS ABI", self.ei_osabi, lambda bytes: stringify(bytes, ABI_VALUES)),
+            ValueString("ABI version", self.ei_abiversion, self.__bytes_to_int),
+            ValueString("Object file type", stringify(self.e_type, OBJECT_FILE_TYPES)),
+            ValueString("ISA", stringify(self.e_machine, MACHINE_TYPES)),
+            ValueString("Entry point", self.e_entry, lambda bytes: hex(self.__bytes_to_int(bytes))),
+            ValueString("Program header offset", self.e_phoff, lambda bytes: hex(self.__bytes_to_int(bytes))),
+            ValueString("Section header offset", self.e_shoff, lambda bytes: hex(self.__bytes_to_int(bytes))),
+            ValueString("Flags", self.__arm_flags_str()),
+            ValueString("ELF header size", self.e_ehsize, self.__bytes_to_int, "bytes"),
+            ValueString("Program header entry size", self.e_phentsize, self.__bytes_to_int, "bytes"),
+            ValueString("Program header entry count", self.e_phnum, self.__bytes_to_int),
+            ValueString("Section header entry size", self.e_shentsize, self.__bytes_to_int, "bytes"),
+            ValueString("Section header entry count", self.e_shnum, self.__bytes_to_int),
+            ValueString("Section name index", self.e_shstrndx, self.__bytes_to_int)
+        ]
+
+        dump_values("ELF Header values", values)
 
     def parse(self) -> bool:
         with open(self.INPUT_PATH, 'rb') as elf_file:

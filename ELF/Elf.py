@@ -30,7 +30,7 @@ class Elf:
                 return False
 
             if self.VERBOSE:
-                print(f"{TEXT_BOLD}{TEXT_UNDERLINE}Program header entry {i + 1}:{TEXT_END}\n")
+                print(f"{TEXT_BOLD}{TEXT_UNDERLINE}Program header entry #{i + 1}:{TEXT_END}\n")
                 self.program_headers[i].dump_values()
 
 
