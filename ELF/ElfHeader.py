@@ -1,4 +1,5 @@
-from ELF.ElfHeaderConstants import *
+from ELF.Constants.ElfConstants import *
+from ELF.Constants.ElfHeaderConstants import *
 from Parser.Parser import *
 
 import os
@@ -8,6 +9,7 @@ class ElfHeader:
     def __init__(self, input_path) -> None:
         self.INPUT_PATH = input_path
         self.FILE_SIZE = os.path.getsize(input_path)
+
         self.ei_mag = None
         self.ei_class = None
         self.ei_data = None
@@ -318,3 +320,9 @@ class ElfHeader:
 
     def ph_table_entry_count(self) -> int:
         return self.__bytes_to_int(self.e_phnum)
+
+    def architecture(self) -> Architecture:
+        return Architecture.ELF_32_BIT if self.ei_class == EI_CLASS_32_BIT else Architecture.ELF_64_BIT
+
+    def endianess(self) -> Endianess:
+        return Endianess.LITTLE_ENDIAN if self.ei_data == EI_DATA_LITTLE else Endianess.BIG_ENDIAN
