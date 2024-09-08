@@ -321,6 +321,18 @@ class ElfHeader:
     def ph_table_entry_count(self) -> int:
         return self.__bytes_to_int(self.e_phnum)
 
+    def sh_table_offset(self) -> int:
+        return self.__bytes_to_int(self.e_shoff)
+
+    def sh_entry_size(self) -> int:
+        return self.__bytes_to_int(self.e_shentsize)
+
+    def sh_table_entry_count(self) -> int:
+        return self.__bytes_to_int(self.e_shnum)
+
+    def section_name_index(self) -> int:
+        return self.__bytes_to_int(self.e_shstrndx)
+
     def architecture(self) -> Architecture:
         return Architecture.ELF_32_BIT if self.ei_class == EI_CLASS_32_BIT else Architecture.ELF_64_BIT
 

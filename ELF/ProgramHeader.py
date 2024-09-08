@@ -3,6 +3,7 @@ from ELF.Constants.ProgramHeaderConstants import *
 from Parser.Parser import *
 
 import os
+from typing import BinaryIO
 
 class ElfProgramHeader:
     def __init__(self, input_path: str, size: int, offset: int, arch: Architecture, endianess: Endianess):
