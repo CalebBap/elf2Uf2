@@ -1,4 +1,4 @@
-from ELF.Constants.ElfConstants import Endianess
+from Constants.Constants import Endianess
 
 from typing import BinaryIO
 from typing import Dict

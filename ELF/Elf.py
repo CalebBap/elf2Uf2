@@ -1,4 +1,4 @@
-from ELF.Constants.ElfConstants import *
+from Constants.Constants import *
 from ELF.ElfHeader import ElfHeader
 from ELF.ProgramHeader import ElfProgramHeader
 from ELF.SectionHeader import ElfSectionHeader

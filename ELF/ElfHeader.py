@@ -1,4 +1,4 @@
-from ELF.Constants.ElfConstants import *
+from Constants.Constants import *
 from ELF.Constants.ElfHeaderConstants import *
 from Utilities.Utilities import *
 
