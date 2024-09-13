@@ -2,7 +2,7 @@ from ELF.Constants.ElfConstants import *
 from ELF.ElfHeader import ElfHeader
 from ELF.ProgramHeader import ElfProgramHeader
 from ELF.SectionHeader import ElfSectionHeader
-from Parser.TextFormatters import *
+from Utilities.TextFormatters import *
 
 class Elf:
     def __init__(self, input_path: str) -> None:

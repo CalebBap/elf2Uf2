@@ -1,6 +1,6 @@
 from ELF.Constants.ElfConstants import *
 from ELF.Constants.SectionHeaderConstants import *
-from Parser.Parser import *
+from Utilities.Utilities import *
 
 import os
 from typing import BinaryIO
