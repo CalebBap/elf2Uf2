@@ -21,16 +21,16 @@ PF_R = 0x04
 
 # Stringified header values
 TYPE_VALUES = {
-    b'\x00\x00\x00\x00': "PT_NULL - unused",
-    b'\x01\x00\x00\x00': "PT_LOAD - loadable segment",
-    b'\x02\x00\x00\x00': "PT_DYNAMIC - dynamic linking information",
-    b'\x03\x00\x00\x00': "PT_INTERP - interpreter information",
-    b'\x04\x00\x00\x00': "PT_NOTE - auxiliary information",
-    b'\x05\x00\x00\x00': "PT_SHLIB - reserved",
-    b'\x06\x00\x00\x00': "PT_PHDR - segment contains program header table",
-    b'\x07\x00\x00\x00': "PT_TLS - thread-local storage template",
-    b'\x00\x00\x00\x60': "PT_LOOS - reserved, OS specific",
-    b'\xFF\xFF\xFF\x6F': "PT_HIOS - reserved, OS specific",
-    b'\x00\x00\x00\x70': "PT_LOPROC - reserved, processor specific",
-    b'\xFF\xFF\xFF\x7F': "PT_HIPROC - reserved, processor specific"
+    0x00000000: "PT_NULL - unused",
+    0x00000001: "PT_LOAD - loadable segment",
+    0x00000002: "PT_DYNAMIC - dynamic linking information",
+    0x00000003: "PT_INTERP - interpreter information",
+    0x00000004: "PT_NOTE - auxiliary information",
+    0x00000005: "PT_SHLIB - reserved",
+    0x00000006: "PT_PHDR - segment contains program header table",
+    0x00000007: "PT_TLS - thread-local storage template",
+    0x60000000: "PT_LOOS - reserved, OS specific",
+    0x6FFFFFFF: "PT_HIOS - reserved, OS specific",
+    0x70000000: "PT_LOPROC - reserved, processor specific",
+    0x7FFFFFFF: "PT_HIPROC - reserved, processor specific"
 }

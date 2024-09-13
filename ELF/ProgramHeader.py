@@ -87,7 +87,7 @@ class ElfProgramHeader:
 
     def dump_values(self, index: int) -> str:
         values = [
-            ValueString("Type", self.p_type, lambda bytes: stringify(bytes, TYPE_VALUES)),
+            ValueString("Type", self.p_type, lambda bytes: stringify(self.__bytes_to_int(bytes), TYPE_VALUES)),
             ValueString("Flags", self.__flags_str()),
             ValueString("Offset", self.p_offset, lambda bytes: hex(self.__bytes_to_int(bytes))),
             ValueString("Virtual address", self.p_vaddr, lambda bytes: hex(self.__bytes_to_int(bytes))),

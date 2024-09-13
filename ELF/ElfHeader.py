@@ -264,13 +264,13 @@ class ElfHeader:
     def dump_values(self):
         values = [
             ValueString("Magic", self.ei_mag, lambda bytes: bytes.decode()),
-            ValueString("Class", self.ei_class, lambda bytes: stringify(bytes, CLASS_VALUES)),
-            ValueString("Endianess", self.ei_data, lambda bytes: stringify(bytes, DATA_VALUES)),
+            ValueString("Class", self.ei_class, lambda bytes: stringify(self.__bytes_to_int(bytes), CLASS_VALUES)),
+            ValueString("Endianess", self.ei_data, lambda bytes: stringify(self.__bytes_to_int(bytes), DATA_VALUES)),
             ValueString("Version", self.ei_version, self.__bytes_to_int),
-            ValueString("OS ABI", self.ei_osabi, lambda bytes: stringify(bytes, ABI_VALUES)),
+            ValueString("OS ABI", self.ei_osabi, lambda bytes: stringify(self.__bytes_to_int(bytes), ABI_VALUES)),
             ValueString("ABI version", self.ei_abiversion, self.__bytes_to_int),
-            ValueString("Object file type", stringify(self.e_type, OBJECT_FILE_TYPES)),
-            ValueString("ISA", stringify(self.e_machine, MACHINE_TYPES)),
+            ValueString("Object file type", stringify(self.__bytes_to_int(self.e_type), OBJECT_FILE_TYPES)),
+            ValueString("ISA", stringify(self.__bytes_to_int(self.e_machine), MACHINE_TYPES)),
             ValueString("Entry point", self.e_entry, lambda bytes: hex(self.__bytes_to_int(bytes))),
             ValueString("Program header offset", self.e_phoff, lambda bytes: hex(self.__bytes_to_int(bytes))),
             ValueString("Section header offset", self.e_shoff, lambda bytes: hex(self.__bytes_to_int(bytes))),

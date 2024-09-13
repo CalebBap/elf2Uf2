@@ -1,5 +1,6 @@
 from typing import BinaryIO
 from typing import Callable
+from typing import Dict
 from typing import List
 
 def get_field(file: BinaryIO, file_size: int, field_length: int) -> bytes:
@@ -9,8 +10,8 @@ def get_field(file: BinaryIO, file_size: int, field_length: int) -> bytes:
 
     return file.read(field_length)
 
-def stringify(value: bytes, stringified_values: dict) -> str:
-    return stringified_values[value] if value in stringified_values else value.hex()
+def stringify(value: int, stringified_values: Dict[int, str]) -> str:
+    return stringified_values[value] if value in stringified_values else hex(value)
 
 class ValueString:
     def __init__(self, title: str, value: bytes | str, formatter: Callable = None, unit: str = ""):
