@@ -1,5 +1,4 @@
 from typing import BinaryIO
-from typing import Callable
 from typing import Dict
 from typing import List
 
@@ -14,18 +13,19 @@ def stringify(value: int, stringified_values: Dict[int, str]) -> str:
     return stringified_values[value] if value in stringified_values else hex(value)
 
 class ValueString:
-    def __init__(self, title: str, value: bytes | str, formatter: Callable = None, unit: str = ""):
+    def __init__(self, title: str, value: str, unit: str = ""):
         self.title = title
         self.value = value
         self.unit = unit
-        self.formatter = formatter if formatter is not None else lambda str: str
 
 def dump_values(header: str, values: List[ValueString]):
     if values:
         title_length = max(len(value.title) for value in values)
 
     print(f"{header}:\n")
+
     for value in values:
         title_value_spacing = ' ' * (title_length - len(value.title))
-        print(f"\t{value.title}:{title_value_spacing}\t{value.formatter(value.value)} {value.unit}")
+        print(f"\t{value.title}:{title_value_spacing}\t{value.value} {value.unit}")
+
     print("\n")

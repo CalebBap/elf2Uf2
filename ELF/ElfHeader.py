@@ -266,24 +266,24 @@ class ElfHeader:
 
     def dump_values(self):
         values = [
-            ValueString("Magic", self.ei_mag, lambda bytes: bytes.decode()),
-            ValueString("Class", self.ei_class, lambda bytes: stringify(self.__bytes_to_int(bytes), CLASS_VALUES)),
-            ValueString("Endianess", self.ei_data, lambda bytes: stringify(self.__bytes_to_int(bytes), DATA_VALUES)),
-            ValueString("Version", self.ei_version, self.__bytes_to_int),
-            ValueString("OS ABI", self.ei_osabi, lambda bytes: stringify(self.__bytes_to_int(bytes), ABI_VALUES)),
-            ValueString("ABI version", self.ei_abiversion, self.__bytes_to_int),
+            ValueString("Magic", self.ei_mag.decode()),
+            ValueString("Class", stringify(self.__bytes_to_int(self.ei_class), CLASS_VALUES)),
+            ValueString("Endianess", stringify(self.__bytes_to_int(self.ei_data), DATA_VALUES)),
+            ValueString("Version", self.__bytes_to_int(self.ei_version)),
+            ValueString("OS ABI", stringify(self.__bytes_to_int(self.ei_osabi), ABI_VALUES)),
+            ValueString("ABI version", self.__bytes_to_int(self.ei_abiversion)),
             ValueString("Object file type", stringify(self.__bytes_to_int(self.e_type), OBJECT_FILE_TYPES)),
             ValueString("ISA", stringify(self.__bytes_to_int(self.e_machine), MACHINE_TYPES)),
-            ValueString("Entry point", self.e_entry, lambda bytes: hex(self.__bytes_to_int(bytes))),
-            ValueString("Program header offset", self.e_phoff, lambda bytes: hex(self.__bytes_to_int(bytes))),
-            ValueString("Section header offset", self.e_shoff, lambda bytes: hex(self.__bytes_to_int(bytes))),
+            ValueString("Entry point", hex(self.__bytes_to_int(self.e_entry))),
+            ValueString("Program header offset", hex(self.__bytes_to_int(self.e_phoff))),
+            ValueString("Section header offset", hex(self.__bytes_to_int(self.e_shoff))),
             ValueString("Flags", self.__arm_flags_str()),
-            ValueString("ELF header size", self.e_ehsize, self.__bytes_to_int, "bytes"),
-            ValueString("Program header entry size", self.e_phentsize, self.__bytes_to_int, "bytes"),
-            ValueString("Program header entry count", self.e_phnum, self.__bytes_to_int),
-            ValueString("Section header entry size", self.e_shentsize, self.__bytes_to_int, "bytes"),
-            ValueString("Section header entry count", self.e_shnum, self.__bytes_to_int),
-            ValueString("Section name index", self.e_shstrndx, self.__bytes_to_int)
+            ValueString("ELF header size", self.__bytes_to_int(self.e_ehsize), "bytes"),
+            ValueString("Program header entry size", self.__bytes_to_int(self.e_phentsize), "bytes"),
+            ValueString("Program header entry count", self.__bytes_to_int(self.e_phnum)),
+            ValueString("Section header entry size", self.__bytes_to_int(self.e_shentsize), "bytes"),
+            ValueString("Section header entry count", self.__bytes_to_int(self.e_shnum)),
+            ValueString("Section name index", self.__bytes_to_int(self.e_shstrndx))
         ]
 
         dump_values("ELF Header values", values)

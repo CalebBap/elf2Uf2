@@ -90,13 +90,13 @@ class ElfProgramHeader:
 
     def dump_values(self, index: int) -> str:
         values = [
-            ValueString("Type", self.p_type, lambda bytes: stringify(self.__bytes_to_int(bytes), TYPE_VALUES)),
+            ValueString("Type", stringify(self.__bytes_to_int(self.p_type), TYPE_VALUES)),
             ValueString("Flags", self.__flags_str()),
-            ValueString("Offset", self.p_offset, lambda bytes: hex(self.__bytes_to_int(bytes))),
-            ValueString("Virtual address", self.p_vaddr, lambda bytes: hex(self.__bytes_to_int(bytes))),
-            ValueString("Physical address", self.p_paddr, lambda bytes: hex(self.__bytes_to_int(bytes))),
-            ValueString("File image size", self.p_filesz, self.__bytes_to_int, "bytes"),
-            ValueString("Memory size", self.p_memsz, self.__bytes_to_int, "bytes"),
+            ValueString("Offset", hex(self.__bytes_to_int(self.p_offset))),
+            ValueString("Virtual address", hex(self.__bytes_to_int(self.p_vaddr))),
+            ValueString("Physical address", hex(self.__bytes_to_int(self.p_paddr))),
+            ValueString("File image size", self.__bytes_to_int(self.p_filesz), "bytes"),
+            ValueString("Memory size", self.__bytes_to_int(self.p_memsz), "bytes"),
             ValueString("Alignment", self.__alignment_str()),
         ]
 
