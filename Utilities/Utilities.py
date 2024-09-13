@@ -1,3 +1,5 @@
+from ELF.Constants.ElfConstants import Endianess
+
 from typing import BinaryIO
 from typing import Dict
 from typing import List
@@ -15,7 +17,12 @@ def get_field(file: BinaryIO, file_size: int, field_length: int) -> bytes:
 
     return file.read(field_length)
 
-def stringify(value: int, stringified_values: Dict[int, str]) -> str:
+def bytes_to_int(value: bytes, endianess: Endianess) -> int:
+    endianess = 'big' if endianess == Endianess.BIG_ENDIAN else 'little'
+    return int.from_bytes(value, endianess)
+
+def stringify(value: bytes, endianess: Endianess, stringified_values: Dict[int, str]) -> str:
+    value = bytes_to_int(value, endianess)
     return stringified_values[value] if value in stringified_values else hex(value)
 
 def dump_values(header: str, values: List[ValueString]):

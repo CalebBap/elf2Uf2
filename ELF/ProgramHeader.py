@@ -65,12 +65,8 @@ class ElfProgramHeader:
         self.p_align = get_field(file, self.FILE_SIZE, length)
         return self.p_align is not None
 
-    def __bytes_to_int(self, value: bytes) -> int:
-        endianess = 'little' if self.endianess == Endianess.LITTLE_ENDIAN else 'big'
-        return int.from_bytes(value, endianess)
-
     def __flags_str(self) -> str:
-        flags = self.__bytes_to_int(self.p_flags)
+        flags = bytes_to_int(self.p_flags, self.endianess)
 
         flags_str = ""
         flags_str += "R" if flags & PF_R else ""
@@ -80,7 +76,7 @@ class ElfProgramHeader:
         return flags_str
 
     def __alignment_str(self) -> str:
-        alignment = self.__bytes_to_int(self.p_align)
+        alignment = bytes_to_int(self.p_align, self.endianess)
         alignment_str = hex(alignment)
 
         if alignment in [0, 1]:
@@ -90,13 +86,13 @@ class ElfProgramHeader:
 
     def dump_values(self, index: int) -> str:
         values = [
-            ValueString("Type", stringify(self.__bytes_to_int(self.p_type), TYPE_VALUES)),
+            ValueString("Type", stringify(self.p_type, self.endianess, TYPE_VALUES)),
             ValueString("Flags", self.__flags_str()),
-            ValueString("Offset", hex(self.__bytes_to_int(self.p_offset))),
-            ValueString("Virtual address", hex(self.__bytes_to_int(self.p_vaddr))),
-            ValueString("Physical address", hex(self.__bytes_to_int(self.p_paddr))),
-            ValueString("File image size", self.__bytes_to_int(self.p_filesz), "bytes"),
-            ValueString("Memory size", self.__bytes_to_int(self.p_memsz), "bytes"),
+            ValueString("Offset", hex(bytes_to_int(self.p_offset, self.endianess))),
+            ValueString("Virtual address", hex(bytes_to_int(self.p_vaddr, self.endianess))),
+            ValueString("Physical address", hex(bytes_to_int(self.p_paddr, self.endianess))),
+            ValueString("File image size", bytes_to_int(self.p_filesz, self.endianess), "bytes"),
+            ValueString("Memory size", bytes_to_int(self.p_memsz, self.endianess), "bytes"),
             ValueString("Alignment", self.__alignment_str()),
         ]
 

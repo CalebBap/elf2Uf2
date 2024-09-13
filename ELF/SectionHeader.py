@@ -74,10 +74,6 @@ class ElfSectionHeader:
         self.sh_entsize = get_field(file, self.FILE_SIZE, length)
         return self.sh_entsize is not None
 
-    def __bytes_to_int(self, value: bytes) -> int:
-        endianess = 'little' if self.endianess == Endianess.LITTLE_ENDIAN else 'big'
-        return int.from_bytes(value, endianess)
-
     def __parse_string(self, offset: int) -> str:
         with open(self.INPUT_PATH, 'rb') as elf_file:
             elf_file.seek(offset)
@@ -92,7 +88,7 @@ class ElfSectionHeader:
 
     def dump_values(self, index: int, string_table_offset: int) -> str:
         values = [
-            ValueString("Name", self.__parse_string(string_table_offset + self.__bytes_to_int(self.sh_name))),
+            ValueString("Name", self.__parse_string(string_table_offset + bytes_to_int(self.sh_name, self.endianess))),
             # TODO: ValueString("Type"),
             # TODO: ValueString("Flags"),
             # TODO: ValueString("Virtual address"),
@@ -134,4 +130,4 @@ class ElfSectionHeader:
             return True
 
     def offset(self) -> int:
-        return self.__bytes_to_int(self.sh_offset)
+        return bytes_to_int(self.sh_offset, self.endianess)
