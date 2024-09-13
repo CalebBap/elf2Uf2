@@ -24,6 +24,9 @@ class ElfProgramHeader:
         self.p_flags = None
         self.p_align = None
 
+        if not self.__parse():
+            raise Exception("Error: failed to parse ELF program header entry")
+
     def __parse_type(self, file: BinaryIO) -> bool:
         self.p_type = get_field(file, self.FILE_SIZE, P_TYPE_LEN)
         return self.p_type is not None
@@ -99,7 +102,7 @@ class ElfProgramHeader:
 
         dump_values(f"Segment #{index}", values)
 
-    def parse(self) -> bool:
+    def __parse(self) -> bool:
         with open(self.INPUT_PATH, 'rb') as elf_file:
             elf_file.seek(self.OFFSET)
 

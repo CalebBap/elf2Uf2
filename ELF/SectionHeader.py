@@ -25,6 +25,9 @@ class ElfSectionHeader:
         self.sh_addralign = None
         self.sh_entsize = None
 
+        if not self.__parse():
+            raise Exception("Error: failed to parse ELF section header entry")
+
     def __parse_name(self, file: BinaryIO) -> bool:
         self.sh_name = get_field(file, self.FILE_SIZE, SH_NAME_LEN)
         return self.sh_name is not None
@@ -103,7 +106,7 @@ class ElfSectionHeader:
 
         dump_values(f"Section #{index}", values)
 
-    def parse(self) -> bool:
+    def __parse(self) -> bool:
         with open(self.INPUT_PATH, 'rb') as elf_file:
             elf_file.seek(self.OFFSET)
 

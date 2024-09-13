@@ -31,7 +31,6 @@ if __name__ == "__main__":
 
     VERBOSE = args.verbose
 
-    elf = Elf(INPUT_PATH, VERBOSE)
-    if not elf.parse():
-        print(f"\nFailed to parse ELF file")
-        sys.exit(errno.EINVAL)
+    elf = Elf(INPUT_PATH)
+    if VERBOSE:
+        elf.dump_values()

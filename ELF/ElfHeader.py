@@ -6,7 +6,7 @@ import os
 from typing import BinaryIO
 
 class ElfHeader:
-    def __init__(self, input_path) -> None:
+    def __init__(self, input_path: str) -> None:
         self.INPUT_PATH = input_path
         self.FILE_SIZE = os.path.getsize(input_path)
 
@@ -29,6 +29,9 @@ class ElfHeader:
         self.e_shentsize = None
         self.e_shnum = None
         self.e_shstrndx = None
+
+        if not self.__parse():
+            raise Exception("Error: failed to parse ELF header")
 
     def __parse_magic(self, file: BinaryIO) -> bool:
         self.ei_mag = get_field(file, self.FILE_SIZE, EI_MAG_LEN)
@@ -285,7 +288,7 @@ class ElfHeader:
 
         dump_values("ELF Header values", values)
 
-    def parse(self) -> bool:
+    def __parse(self) -> bool:
         with open(self.INPUT_PATH, 'rb') as elf_file:
             parse_funcs = [
                 self.__parse_magic,
