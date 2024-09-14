@@ -1,5 +1,6 @@
 from Constants.Constants import *
 from ELF.Constants.ProgramHeaderConstants import *
+from Utilities.FormatOutput import *
 from Utilities.Utilities import *
 
 import os
