@@ -75,23 +75,88 @@ class ElfSectionHeader:
         self.sh_entsize = get_field(file, self.FILE_SIZE, length)
         return self.sh_entsize is not None
 
-    def __section_name(self, string_table_offset: int):
+    def __section_name(self, string_table_offset: int) -> str:
         sh_name_offset = bytes_to_int(self.sh_name, self.endianess)
         total_offset = string_table_offset + sh_name_offset
         return parse_string(self.INPUT_PATH, total_offset)
 
+    def __flags_str(self) -> str:
+        flags = bytes_to_int(self.sh_flags, self.endianess)
+        str = hex(flags)
+
+        if flags & SHF_WRITE:
+            flags &= ~SHF_WRITE
+            str += ", write"
+
+        if flags & SHF_ALLOC:
+            flags &= ~SHF_ALLOC
+            str += ", allocate"
+
+        if flags & SHF_EXECINSTR:
+            flags &= ~SHF_EXECINSTR
+            str += ", execute"
+
+        if flags & SHF_MERGE:
+            flags &= ~SHF_MERGE
+            str += ", merge"
+
+        if flags & SHF_STRINGS:
+            flags &= ~SHF_STRINGS
+            str += ", strings"
+
+        if flags & SHF_INFO_LINK:
+            flags &= ~SHF_INFO_LINK
+            str += ", info"
+
+        if flags & SHF_LINK_ORDER:
+            flags &= ~SHF_LINK_ORDER
+            str += ", link order"
+
+        if flags & SHF_OS_NONCONFORMING:
+            flags &= ~SHF_OS_NONCONFORMING
+            str += ", OS processing required"
+
+        if flags & SHF_GROUP:
+            flags &= ~SHF_GROUP
+            str += ", group"
+
+        if flags & SHF_TLS:
+            flags &= ~SHF_TLS
+            str += ", thread-local data"
+
+        if flags & SHF_MASKOS:
+            flags &= ~SHF_MASKOS
+            str += ", OS specific"
+
+        if flags & SHF_MASKPROC:
+            flags &= ~SHF_MASKPROC
+            str += ", processor specific"
+
+        if flags & SHF_ORDERED:
+            flags &= ~SHF_ORDERED
+            str += ", special ordering"
+
+        if flags & SHF_EXCLUDE:
+            flags &= ~SHF_EXCLUDE
+            str += ", excluded unless referenced or allocated"
+
+        if flags != 0:
+            str += f", <unknown - {hex(flags)}>"
+
+        return str
+
     def dump_values(self, index: int, string_table_offset: int) -> str:
         values = [
             ValueStr("Name", self.__section_name(string_table_offset)),
-            # TODO: ValueString("Type"),
-            # TODO: ValueString("Flags"),
-            # TODO: ValueString("Virtual address"),
-            # TODO: ValueString("File image offset"),
-            # TODO: ValueString("Size"),
-            # TODO: ValueString("Associated section index"),
-            # TODO: ValueString("Information"),
-            # TODO: ValueString("Alignment"),
-            # TODO: ValueString("Entry fixed-size"),
+            ValueDict("Type", self.sh_type, self.endianess, TYPE_VALUES),
+            ValueStr("Flags", self.__flags_str()),
+            ValueHex("Virtual address", self.sh_addr, self.endianess),
+            ValueHex("File image offset", self.sh_offset, self.endianess),
+            ValueInt("Size", self.sh_size, self.endianess, "bytes"),
+            ValueInt("Associated section index", self.sh_link, self.endianess),
+            ValueInt("Information", self.sh_info, self.endianess),
+            ValueHex("Alignment", self.sh_addralign, self.endianess),
+            ValueInt("Entry fixed-size", self.sh_entsize, self.endianess, "bytes"),
         ]
 
         dump_values(f"Section #{index}", values)
