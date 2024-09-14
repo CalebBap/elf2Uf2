@@ -74,21 +74,14 @@ class ElfSectionHeader:
         self.sh_entsize = get_field(file, self.FILE_SIZE, length)
         return self.sh_entsize is not None
 
-    def __parse_string(self, offset: int) -> str:
-        with open(self.INPUT_PATH, 'rb') as elf_file:
-            elf_file.seek(offset)
-
-            str = ""
-            chr = elf_file.read(1)
-            while chr != b'\x00':
-                str += chr.decode()
-                chr = elf_file.read(1)
-
-            return str
+    def __section_name(self, string_table_offset: int):
+        sh_name_offset = bytes_to_int(self.sh_name, self.endianess)
+        total_offset = string_table_offset + sh_name_offset
+        return parse_string(self.INPUT_PATH, total_offset)
 
     def dump_values(self, index: int, string_table_offset: int) -> str:
         values = [
-            ValueStr("Name", self.__parse_string(string_table_offset + bytes_to_int(self.sh_name, self.endianess))),
+            ValueStr("Name", self.__section_name(string_table_offset)),
             # TODO: ValueString("Type"),
             # TODO: ValueString("Flags"),
             # TODO: ValueString("Virtual address"),

@@ -57,3 +57,15 @@ def dump_values(header: str, values: List[Type[ValueStr]]):
         print(f"\t{value.title}:{title_value_spacing}\t{value.value} {value.unit}")
 
     print("\n")
+
+def parse_string(input_path: str, offset: int) -> str:
+    with open(input_path, 'rb') as file:
+        file.seek(offset)
+
+        str = ""
+        chr = file.read(1)
+        while chr != b'\x00':
+            str += chr.decode()
+            chr = file.read(1)
+
+        return str
