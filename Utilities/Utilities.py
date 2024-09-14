@@ -3,12 +3,33 @@ from Constants.Constants import Endianess
 from typing import BinaryIO
 from typing import Dict
 from typing import List
+from typing import Type
 
-class ValueString:
+class ValueStr:
     def __init__(self, title: str, value: str, unit: str = ""):
         self.title = title
         self.value = value
         self.unit = unit
+
+class ValueUnicode(ValueStr):
+    def __init__(self, title: str, value: bytes, unit: str = ""):
+        value = value.decode()
+        ValueStr.__init__(self, title, value, unit)
+
+class ValueInt(ValueStr):
+    def __init__(self, title: str, value: bytes, endianess: Endianess, unit: str = ""):
+        value = bytes_to_int(value, endianess)
+        ValueStr.__init__(self, title, value, unit)
+
+class ValueHex(ValueStr):
+    def __init__(self, title: str, value: bytes, endianess: Endianess, unit: str = ""):
+        value = hex(bytes_to_int(value, endianess))
+        ValueStr.__init__(self, title, value, unit)
+
+class ValueDict(ValueStr):
+    def __init__(self, title: str, value: bytes, endianess: Endianess, stringified_values: Dict[int, str], unit: str = ""):
+        value = stringify(value, endianess, stringified_values)
+        ValueStr.__init__(self, title, value, unit)
 
 def get_field(file: BinaryIO, file_size: int, field_length: int) -> bytes:
     if file_size < (file.tell() + field_length):
@@ -25,7 +46,7 @@ def stringify(value: bytes, endianess: Endianess, stringified_values: Dict[int, 
     value = bytes_to_int(value, endianess)
     return stringified_values[value] if value in stringified_values else hex(value)
 
-def dump_values(header: str, values: List[ValueString]):
+def dump_values(header: str, values: List[Type[ValueStr]]):
     if values:
         title_length = max(len(value.title) for value in values)
 

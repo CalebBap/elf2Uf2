@@ -262,24 +262,24 @@ class ElfHeader:
 
     def dump_values(self):
         values = [
-            ValueString("Magic", self.ei_mag.decode()),
-            ValueString("Class", stringify(self.ei_class, self.endianess(), CLASS_VALUES)),
-            ValueString("Endianess", stringify(self.ei_data, self.endianess(), DATA_VALUES)),
-            ValueString("Version", bytes_to_int(self.ei_version, self.endianess())),
-            ValueString("OS ABI", stringify(self.ei_osabi, self.endianess(), ABI_VALUES)),
-            ValueString("ABI version", bytes_to_int(self.ei_abiversion, self.endianess())),
-            ValueString("Object file type", stringify(self.e_type, self.endianess(), OBJECT_FILE_TYPES)),
-            ValueString("ISA", stringify(self.e_machine, self.endianess(), MACHINE_TYPES)),
-            ValueString("Entry point", hex(bytes_to_int(self.e_entry, self.endianess()))),
-            ValueString("Program header offset", hex(bytes_to_int(self.e_phoff, self.endianess()))),
-            ValueString("Section header offset", hex(bytes_to_int(self.e_shoff, self.endianess()))),
-            ValueString("Flags", self.__arm_flags_str()),
-            ValueString("ELF header size", bytes_to_int(self.e_ehsize, self.endianess()), "bytes"),
-            ValueString("Program header entry size", bytes_to_int(self.e_phentsize, self.endianess()), "bytes"),
-            ValueString("Program header entry count", bytes_to_int(self.e_phnum, self.endianess())),
-            ValueString("Section header entry size", bytes_to_int(self.e_shentsize, self.endianess()), "bytes"),
-            ValueString("Section header entry count", bytes_to_int(self.e_shnum, self.endianess())),
-            ValueString("Section name index", bytes_to_int(self.e_shstrndx, self.endianess()))
+            ValueUnicode("Magic", self.ei_mag),
+            ValueDict("Class", self.ei_class, self.endianess(), CLASS_VALUES),
+            ValueDict("Endianess", self.ei_data, self.endianess(), DATA_VALUES),
+            ValueInt("Version", self.ei_version, self.endianess()),
+            ValueDict("OS ABI", self.ei_osabi, self.endianess(), ABI_VALUES),
+            ValueInt("ABI version", self.ei_abiversion, self.endianess()),
+            ValueDict("Object file type", self.e_type, self.endianess(), OBJECT_FILE_TYPES),
+            ValueDict("ISA", self.e_machine, self.endianess(), MACHINE_TYPES),
+            ValueHex("Entry point", self.e_entry, self.endianess()),
+            ValueHex("Program header offset", self.e_phoff, self.endianess()),
+            ValueHex("Section header offset", self.e_shoff, self.endianess()),
+            ValueStr("Flags", self.__arm_flags_str()),
+            ValueInt("ELF header size", self.e_ehsize, self.endianess(), "bytes"),
+            ValueInt("Program header entry size", self.e_phentsize, self.endianess(), "bytes"),
+            ValueInt("Program header entry count", self.e_phnum, self.endianess()),
+            ValueInt("Section header entry size", self.e_shentsize, self.endianess(), "bytes"),
+            ValueInt("Section header entry count", self.e_shnum, self.endianess()),
+            ValueInt("Section name index", self.e_shstrndx, self.endianess())
         ]
 
         dump_values("ELF Header values", values)

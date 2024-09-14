@@ -88,7 +88,7 @@ class ElfSectionHeader:
 
     def dump_values(self, index: int, string_table_offset: int) -> str:
         values = [
-            ValueString("Name", self.__parse_string(string_table_offset + bytes_to_int(self.sh_name, self.endianess))),
+            ValueStr("Name", self.__parse_string(string_table_offset + bytes_to_int(self.sh_name, self.endianess))),
             # TODO: ValueString("Type"),
             # TODO: ValueString("Flags"),
             # TODO: ValueString("Virtual address"),

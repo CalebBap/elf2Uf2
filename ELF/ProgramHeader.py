@@ -86,14 +86,14 @@ class ElfProgramHeader:
 
     def dump_values(self, index: int) -> str:
         values = [
-            ValueString("Type", stringify(self.p_type, self.endianess, TYPE_VALUES)),
-            ValueString("Flags", self.__flags_str()),
-            ValueString("Offset", hex(bytes_to_int(self.p_offset, self.endianess))),
-            ValueString("Virtual address", hex(bytes_to_int(self.p_vaddr, self.endianess))),
-            ValueString("Physical address", hex(bytes_to_int(self.p_paddr, self.endianess))),
-            ValueString("File image size", bytes_to_int(self.p_filesz, self.endianess), "bytes"),
-            ValueString("Memory size", bytes_to_int(self.p_memsz, self.endianess), "bytes"),
-            ValueString("Alignment", self.__alignment_str()),
+            ValueDict("Type", self.p_type, self.endianess, TYPE_VALUES),
+            ValueStr("Flags", self.__flags_str()),
+            ValueHex("Offset", self.p_offset, self.endianess),
+            ValueHex("Virtual address", self.p_vaddr, self.endianess),
+            ValueHex("Physical address", self.p_paddr, self.endianess),
+            ValueInt("File image size", self.p_filesz, self.endianess, "bytes"),
+            ValueInt("Memory size", self.p_memsz, self.endianess, "bytes"),
+            ValueStr("Alignment", self.__alignment_str()),
         ]
 
         dump_values(f"Segment #{index}", values)
