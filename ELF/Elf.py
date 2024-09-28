@@ -58,3 +58,6 @@ class Elf:
         self.elf_header.dump_values()
         self.__dump_program_header_table()
         self.__dump_section_header_table()
+
+    def entry_point(self) -> int:
+        return self.elf_header.entry_point()

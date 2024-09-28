@@ -1,3 +1,4 @@
 *.elf
+*.uf2
 .vscode/
 __pycache__/

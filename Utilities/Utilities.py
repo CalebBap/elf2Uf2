@@ -2,8 +2,6 @@ from Constants.Constants import Endianess
 
 from typing import BinaryIO
 from typing import Dict
-from typing import List
-from typing import Type
 
 def get_field(file: BinaryIO, file_size: int, field_length: int) -> bytes:
     if file_size < (file.tell() + field_length):
@@ -31,3 +29,14 @@ def parse_string(input_path: str, offset: int) -> str:
             chr = file.read(1)
 
         return str
+
+def zero_pad_data(data: bytes, padded_size: int) -> bytes:
+    data_size = len(data)
+
+    if data_size > padded_size:
+        raise Exception(f"Error: data size of {data_size} bytes exceeds {padded_size} bytes")
+
+    if data_size != padded_size:
+        data += b'\x00' * (padded_size - data_size)
+
+    return data

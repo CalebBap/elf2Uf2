@@ -6,28 +6,28 @@ from typing import List
 from typing import Type
 
 class ValueStr:
-    def __init__(self, title: str, value: str, unit: str = ""):
+    def __init__(self, title: str, value: str, unit: str = "") -> None:
         self.title = title
         self.value = value
         self.unit = unit
 
 class ValueUnicode(ValueStr):
-    def __init__(self, title: str, value: bytes, unit: str = ""):
+    def __init__(self, title: str, value: bytes, unit: str = "") -> None:
         value = value.decode()
         ValueStr.__init__(self, title, value, unit)
 
 class ValueInt(ValueStr):
-    def __init__(self, title: str, value: bytes, endianess: Endianess, unit: str = ""):
+    def __init__(self, title: str, value: bytes, endianess: Endianess, unit: str = "") -> None:
         value = bytes_to_int(value, endianess)
         ValueStr.__init__(self, title, value, unit)
 
 class ValueHex(ValueStr):
-    def __init__(self, title: str, value: bytes, endianess: Endianess, unit: str = ""):
+    def __init__(self, title: str, value: bytes, endianess: Endianess, unit: str = "") -> None:
         value = hex(bytes_to_int(value, endianess))
         ValueStr.__init__(self, title, value, unit)
 
 class ValueDict(ValueStr):
-    def __init__(self, title: str, value: bytes, endianess: Endianess, stringified_values: Dict[int, str], unit: str = ""):
+    def __init__(self, title: str, value: bytes, endianess: Endianess, stringified_values: Dict[int, str], unit: str = "") -> None:
         value = stringify(value, endianess, stringified_values)
         ValueStr.__init__(self, title, value, unit)
 

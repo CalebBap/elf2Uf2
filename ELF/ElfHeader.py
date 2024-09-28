@@ -338,3 +338,6 @@ class ElfHeader:
 
     def endianess(self) -> Endianess:
         return Endianess.LITTLE_ENDIAN if self.ei_data == EI_DATA_LITTLE else Endianess.BIG_ENDIAN
+
+    def entry_point(self) -> int:
+        return bytes_to_int(self.e_entry, self.endianess())

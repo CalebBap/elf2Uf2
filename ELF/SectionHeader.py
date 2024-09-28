@@ -7,7 +7,7 @@ import os
 from typing import BinaryIO
 
 class ElfSectionHeader:
-    def __init__(self, input_path: str, size: int, offset: int, arch: Architecture, endianess: Endianess):
+    def __init__(self, input_path: str, size: int, offset: int, arch: Architecture, endianess: Endianess) -> None:
         self.INPUT_PATH = input_path
         self.FILE_SIZE = os.path.getsize(input_path)
         self.SIZE = size
